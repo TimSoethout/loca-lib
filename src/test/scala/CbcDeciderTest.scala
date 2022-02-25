@@ -23,4 +23,9 @@ class CbcDeciderTest extends AnyFlatSpec with should.Matchers {
   it should "allow parallel withdrawals sufficient balance is available" in {
     decider.allow(100, Seq(Withdraw(10)), Withdraw(10)) shouldBe Accept
   }
+
+  it should "allow parallel withdrawals sufficient balance is available with multiple in progress" in {
+    decider.allow(100, Seq(Withdraw(10),Withdraw(10),Withdraw(10)), Withdraw(10)) shouldBe Accept
+    decider.allow(100, Seq(Withdraw(10),Deposit(10),Withdraw(10)), Withdraw(10)) shouldBe Accept
+  }
 }
