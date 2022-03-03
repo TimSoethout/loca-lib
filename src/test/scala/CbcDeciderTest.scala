@@ -1,9 +1,9 @@
 package com.ing.loca
 
 import LoCADecider.{Accept, Delay, Reject}
-import example.Account.{Deposit, Withdraw}
 import example.AccountEntity
 
+import com.ing.loca.example.AccountEntity.{Deposit, Withdraw}
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
 
@@ -28,4 +28,6 @@ class CbcDeciderTest extends AnyFlatSpec with should.Matchers {
     decider.allow(100, Seq(Withdraw(10),Withdraw(10),Withdraw(10)), Withdraw(10)) shouldBe Accept
     decider.allow(100, Seq(Withdraw(10),Deposit(10),Withdraw(10)), Withdraw(10)) shouldBe Accept
   }
+
+  // TODO add example with balance return values to show where modeling influences condition
 }

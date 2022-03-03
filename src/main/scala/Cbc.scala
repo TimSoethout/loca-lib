@@ -20,8 +20,10 @@ class CbcDecider[E <: Entity](val entity: E) {
   //  DynamicCBC(s, p, q) == /\ RetVal(p, s) = RetVal(p, Eff(q, s))
   //                         /\ RetVal(q, Eff(p, s)) = RetVal(q, s)
   def cbc(state: State, operation: Operation, incomingOperation: Operation): Boolean = {
-    returnValue(state, operation) == returnValue(effect(state, incomingOperation), operation) &&
-      returnValue(effect(state, operation), incomingOperation) == returnValue(state, incomingOperation)
+    operation.returnValue(state) == operation.returnValue(incomingOperation.effect(state)) &&
+      incomingOperation.returnValue(operation.effect(state)) == incomingOperation.returnValue(state)
+//    returnValue(state, operation) == returnValue(effect(state, incomingOperation), operation) &&
+//      returnValue(effect(state, operation), incomingOperation) == returnValue(state, incomingOperation)
   }
 
   //  ConstructiveCBC(state, inProgressOps, incomingOp) ==
@@ -37,7 +39,7 @@ class CbcDecider[E <: Entity](val entity: E) {
     // fold over in progress operations to compute the intermediate states
     // for each intermediate state determine if incoming operation is CBC
     inProgressOperations.foldLeft((state, true)) {
-      case ((prevState, result), op) => (entity.effect(prevState, op), result && cbc(prevState, op, incomingOperation))
+      case ((prevState, result), op) => (op.effect(prevState), result && cbc(prevState, op, incomingOperation))
     }._2
   }
 
