@@ -1,16 +1,9 @@
 package com.ing.loca
 package example
 
-import example.Account.*
-
 import com.ing.loca.OperationType
 
 type Money = BigDecimal
-
-object Account {
-
-
-}
 
 object AccountEntity extends Entity {
   override type Operation = AccountOperation
